@@ -1,0 +1,17 @@
+{
+  "name": "dota-remnant",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^14.14.1",
+    "dota2": "^7.0.3",
+    "steam": "^1.4.1"
+  }
+}
