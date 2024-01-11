@@ -137,3 +137,4 @@ node_modules/
 
 # dotenv environment variables file
 .env
+src/config.json
