@@ -3,6 +3,25 @@ const path = require('node:path');
 const { Client, Collection, GatewayIntentBits } = require('discord.js');
 const { botToken } = require('./config.json');
 
+const express = require('express');
+const {DOTA2GSI} = require('dotagsi');
+
+const app = express();
+const GSI = new DOTA2GSI();
+exports.GSI = GSI;
+
+app.use(express.urlencoded({extended:true}));
+app.use(express.raw({limit:'10Mb', type: 'application/json' }));
+
+app.post('/', (req, res) => {
+	const text = req.body.toString().replace(/"(player|owner)":([ ]*)([0-9]+)/gm, '"$1": "$3"').replace(/(player|owner):([ ]*)([0-9]+)/gm, '"$1": "$3"');
+    const data = JSON.parse(text);
+    // console.log(data)
+    GSI.digest(data);
+    res.sendStatus(200);
+});
+
+
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
 client.commands = new Collection();
@@ -37,3 +56,4 @@ for (const file of eventFiles) {
 }
 
 client.login(botToken);
+app.listen(4000);
