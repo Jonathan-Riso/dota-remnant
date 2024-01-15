@@ -7,7 +7,7 @@ const express = require('express');
 const {DOTA2GSI} = require('dotagsi');
 
 const app = express();
-const GSI = new DOTA2GSI();
+const GSI = new DOTA2GSI()
 exports.GSI = GSI;
 
 app.use(express.urlencoded({extended:true}));
@@ -15,9 +15,8 @@ app.use(express.raw({limit:'10Mb', type: 'application/json' }));
 
 app.post('/', (req, res) => {
 	const text = req.body.toString().replace(/"(player|owner)":([ ]*)([0-9]+)/gm, '"$1": "$3"').replace(/(player|owner):([ ]*)([0-9]+)/gm, '"$1": "$3"');
-    const data = JSON.parse(text);
-    // console.log(data)
-    GSI.digest(data);
+    data = JSON.parse(text);
+	GSI.digest(data);
     res.sendStatus(200);
 });
 
