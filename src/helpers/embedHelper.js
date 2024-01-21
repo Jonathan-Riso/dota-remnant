@@ -1,4 +1,5 @@
 const { EmbedBuilder } = require("discord.js")
+const { heroes } = require("./heroes")
 
 function draftEmbed(dota2){
     const remnantEmbed = new EmbedBuilder()
@@ -12,20 +13,20 @@ function inProgressEmbed(dota2){
     return new EmbedBuilder()
         .setColor(0x0099FF)
         .addFields(
-            { name: dota2.players[0].name, value: `${dota2.players[0].hero.name}\n${_kdaToStr(dota2.players[0])}`, inline: true },
-            { name: dota2.players[5].name, value: `${dota2.players[5].hero.name}\n${_kdaToStr(dota2.players[5])}`, inline: true },
+            { name: dota2.players[0].name, value: `${heroes[dota2.players[0].hero.name]}\n${_kdaToStr(dota2.players[0])}`, inline: true },
+            { name: dota2.players[5].name, value: `${heroes[dota2.players[5].hero.name]}\n${_kdaToStr(dota2.players[5])}`, inline: true },
             { name: ' ', value: ' ' },
-            { name: dota2.players[1].name, value: `${dota2.players[1].hero.name}\n${_kdaToStr(dota2.players[1])}`, inline: true },
-            { name: dota2.players[6].name, value: `${dota2.players[6].hero.name}\n${_kdaToStr(dota2.players[6])}`, inline: true },
+            { name: dota2.players[1].name, value: `${heroes[dota2.players[1].hero.name]}\n${_kdaToStr(dota2.players[1])}`, inline: true },
+            { name: dota2.players[6].name, value: `${heroes[dota2.players[6].hero.name]}\n${_kdaToStr(dota2.players[6])}`, inline: true },
             { name: ' ', value: ' ' },
-            { name: dota2.players[2].name, value: `${dota2.players[2].hero.name}\n${_kdaToStr(dota2.players[2])}`, inline: true },
-            { name: dota2.players[7].name, value: `${dota2.players[7].hero.name}\n${_kdaToStr(dota2.players[7])}`, inline: true },
+            { name: dota2.players[2].name, value: `${heroes[dota2.players[2].hero.name]}\n${_kdaToStr(dota2.players[2])}`, inline: true },
+            { name: dota2.players[7].name, value: `${heroes[dota2.players[7].hero.name]}\n${_kdaToStr(dota2.players[7])}`, inline: true },
             { name: ' ', value: ' ' },
-            { name: dota2.players[3].name, value: `${dota2.players[3].hero.name}\n${_kdaToStr(dota2.players[3])}`, inline: true },
-            { name: dota2.players[8].name, value: `${dota2.players[8].hero.name}\n${_kdaToStr(dota2.players[8])}`, inline: true },
+            { name: dota2.players[3].name, value: `${heroes[dota2.players[3].hero.name]}\n${_kdaToStr(dota2.players[3])}`, inline: true },
+            { name: dota2.players[8].name, value: `${heroes[dota2.players[8].hero.name]}\n${_kdaToStr(dota2.players[8])}`, inline: true },
             { name: ' ', value: ' ' },
-            { name: dota2.players[4].name, value: `${dota2.players[4].hero.name}\n${_kdaToStr(dota2.players[4])}`, inline: true },
-            { name: dota2.players[9].name, value: `${dota2.players[9].hero.name}\n${_kdaToStr(dota2.players[9])}`, inline: true },
+            { name: dota2.players[4].name, value: `${heroes[dota2.players[4].hero.name]}\n${_kdaToStr(dota2.players[4])}`, inline: true },
+            { name: dota2.players[9].name, value: `${heroes[dota2.players[9].hero.name]}\n${_kdaToStr(dota2.players[9])}`, inline: true },
             { name: ' ', value: ' ' },
             { name: 'Radiant', 	value: `Win Percentage: ${dota2.map.radiant_win_chance}\n Total Net Worth: ${_getTeamNetWorths(dota2.players).radiant}`, inline: true },
             { name: 'Dire', 	value: `Win Percentage: ${100 - dota2.map.radiant_win_chance}\n Total Net Worth: ${_getTeamNetWorths(dota2.players).dire}`, inline: true },
@@ -34,7 +35,7 @@ function inProgressEmbed(dota2){
             { name: 'Dire Net Worth', value: `${_getNetWorths(dota2.players, 'dire')}`, inline: true },
         )
         .setTimestamp()
-        .setFooter({ text: 'https://github.com/Jonathan-Riso/dota-remnant', iconURL: 'https://i.imgur.com/AfFp7pu.png' });
+        .setFooter({ text: 'https://github.com/Jonathan-Riso/dota-remnant'});
 }
 
 function _kdaToStr(player){
