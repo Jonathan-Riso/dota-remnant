@@ -281,3 +281,4 @@ const items = {
     "item_wraith_band": "wraith band",
     "item_yasha": "yasha",
 }
+exports.items = items;

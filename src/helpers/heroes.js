@@ -65,7 +65,7 @@ const heroes = {
     "npc_dota_hero_muerta": "Muerta", 
     "npc_dota_hero_naga_siren": "Naga Siren", 
     "npc_dota_hero_necrolyte": "Necrolyte", 
-    "npc_dota_hero_nevermore": "Nevermore", 
+    "npc_dota_hero_nevermore": "Shadow Fiend", 
     "npc_dota_hero_night_stalker": "Night Stalker", 
     "npc_dota_hero_nyx_assassin": "Nyx Assassin", 
     "npc_dota_hero_obsidian_destroyer": "Outworld Destroyer", 
