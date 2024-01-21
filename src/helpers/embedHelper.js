@@ -64,7 +64,6 @@ function _getWorths(players, faction){
             res = res + player_str;
         }
     });
-    console.log(res)
     return res;
 }
 
@@ -72,7 +71,6 @@ function _getBackpack(player){
     var backpack = [];
     player.items.forEach( (item) => {
         if (item.name != 'empty') {
-            console.log(item.name);
             backpack.push(items[item.name]);
         }
     });
