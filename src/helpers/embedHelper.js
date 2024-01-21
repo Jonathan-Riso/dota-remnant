@@ -15,26 +15,11 @@ function inProgressEmbed(dota2){
         .setColor(0x0099FF)
         .setTitle('Dota2 Remnant')
         .addFields(
-            { name: dota2.players[0].name, value: `${_playerHeroAndLevel(dota2.players[0])}\n${_kdaToStr(dota2.players[0])}`, inline: true },
-            { name: dota2.players[5].name, value: `${_playerHeroAndLevel(dota2.players[5])}\n${_kdaToStr(dota2.players[5])}`, inline: true },
-            { name: ' ', value: ' ' },
-            { name: dota2.players[1].name, value: `${_playerHeroAndLevel(dota2.players[1])}\n${_kdaToStr(dota2.players[1])}`, inline: true },
-            { name: dota2.players[6].name, value: `${_playerHeroAndLevel(dota2.players[6])}\n${_kdaToStr(dota2.players[6])}`, inline: true },
-            { name: ' ', value: ' ' },
-            { name: dota2.players[2].name, value: `${_playerHeroAndLevel(dota2.players[2])}\n${_kdaToStr(dota2.players[2])}`, inline: true },
-            { name: dota2.players[7].name, value: `${_playerHeroAndLevel(dota2.players[7])}\n${_kdaToStr(dota2.players[7])}`, inline: true },
-            { name: ' ', value: ' ' },
-            { name: dota2.players[3].name, value: `${_playerHeroAndLevel(dota2.players[3])}\n${_kdaToStr(dota2.players[3])}`, inline: true },
-            { name: dota2.players[8].name, value: `${_playerHeroAndLevel(dota2.players[8])}\n${_kdaToStr(dota2.players[8])}`, inline: true },
-            { name: ' ', value: ' ' },
-            { name: dota2.players[4].name, value: `${_playerHeroAndLevel(dota2.players[4])}\n${_kdaToStr(dota2.players[4])}`, inline: true },
-            { name: dota2.players[9].name, value: `${_playerHeroAndLevel(dota2.players[9])}\n${_kdaToStr(dota2.players[9])}`, inline: true },
-            { name: ' ', value: ' ' },
             { name: 'Radiant', 	value: `***Win Percentage***: ${dota2.map.radiant_win_chance}%\n ***Total Net Worth***: ${_getTeamNetWorths(dota2.players).radiant}`, inline: true },
             { name: 'Dire', 	value: `***Win Percentage***: ${100 - dota2.map.radiant_win_chance}%\n ***Total Net Worth***: ${_getTeamNetWorths(dota2.players).dire}`, inline: true },
             { name: ' ', value: ' ' },
-            { name: 'Radiant', value: `${_getWorths(dota2.players, 'radiant')}`, inline: true },
-            { name: 'Dire', value: `${_getWorths(dota2.players, 'dire')}`, inline: true },
+            { name: 'Worths', value: `${_getWorths(dota2.players, 'radiant')}`, inline: true },
+            { name: 'Worths', value: `${_getWorths(dota2.players, 'dire')}`, inline: true },
         )
         .setTimestamp()
         .setFooter({ text: 'https://github.com/Jonathan-Riso/dota-remnant'});
@@ -71,13 +56,15 @@ function _getWorths(players, faction){
             const player_str = `
                 **${player.name}**
                 ${_playerHeroAndLevel(player)}
-                ***Networth:*** ${player.net_worth.toLocaleString()}
+                ${_kdaToStr(player)}
+                ***Net Worth:*** ${player.net_worth.toLocaleString()}
                 ***GPM/XPM:*** ${player.gpm}/${player.xpm}
-                ***LastHits:*** ${player.last_hits}/${player.denies}
-            `; //Markdown syntax
+                ***Last Hits:*** ${player.last_hits}/${player.denies}\n
+            `.trimStart(); //Markdown syntax // I don't know why it doesn't work without trimStart. I am actually clueless.
             res = res + player_str;
         }
     });
+    console.log(res)
     return res;
 }
 
