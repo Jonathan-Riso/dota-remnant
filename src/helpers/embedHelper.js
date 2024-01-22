@@ -15,32 +15,43 @@ function inProgressEmbed(dota2){
         .setColor(0x0099FF)
         .setTitle('Dota2 Remnant')
         .addFields(
-            { name: 'Radiant', 	value: `***Win Percentage***: ${dota2.map.radiant_win_chance}%\n ***Total Net Worth***: ${_getTeamNetWorths(dota2.players).radiant}`, inline: true },
-            { name: 'Dire', 	value: `***Win Percentage***: ${100 - dota2.map.radiant_win_chance}%\n ***Total Net Worth***: ${_getTeamNetWorths(dota2.players).dire}`, inline: true },
+            { name: 'Radiant', 	value: `${_getTeamWorths(dota2, 'radiant')}`, inline: true },
+            { name: 'Dire', 	value: `${_getTeamWorths(dota2, 'dire')}`, inline: true },
             { name: ' ', value: ' ' },
             { name: 'Worths', value: `${_getWorths(dota2.players, 'radiant')}`, inline: true },
-            { name: 'Worths', value: `${_getWorths(dota2.players, 'dire')}`, inline: true },
+            { name: 'Worths', value: `${_getWorths(dota2.players, 'dire')}`, inline: true }
         )
         .setTimestamp()
         .setFooter({ text: 'https://github.com/Jonathan-Riso/dota-remnant'});
 }
 
 function _playerHeroAndLevel(player){
-    return `__${heroes[player.hero.name]}\tLvl ${player.hero.level}__`
+    return `__${heroes[player.hero.name]}\tLvl ${player.hero.level}__`;
 }
 
 function _kdaToStr(player){
-    return `${player.kills}/${player.assists}/${player.deaths}`
+    return `${player.kills}/${player.assists}/${player.deaths}`;
 }
 
-function _getTeamNetWorths(players){
-    var radiantNetworthSum = 0;
-    var direNetworthSum = 0;
-    players.forEach((player) => {
-        if (player.team_name == 'radiant') radiantNetworthSum += player.net_worth;
-        else direNetworthSum += player.net_worth;
+function _getTeamWorths(dota2, faction){
+    var NetWorthSum = 0;
+    var XPSum = 0;
+    var totalKills = 0;
+    const win_chance = (faction == 'radiant') ? dota2.map.radiant_win_chance : 100 - dota2.map.radiant_win_chance;
+    dota2.players.forEach((player) => {
+        if (player.team_name == faction) {
+            NetWorthSum += player.net_worth;
+            XPSum += player.hero.xp;
+            totalKills += player.kills;
+        }
     });
-    return {'dire': direNetworthSum.toLocaleString(), 'radiant': radiantNetworthSum.toLocaleString()};
+    res = `
+        ***Total Kills***: ${totalKills}
+        ***Win Percentage***: ${win_chance}%
+        ***Total Net Worth***: ${NetWorthSum.toLocaleString()}
+        ***Total Experience***: ${XPSum.toLocaleString()}\n
+    `;
+    return res;
 }
 
 function _getWorths(players, faction){
