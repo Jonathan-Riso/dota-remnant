@@ -7,7 +7,7 @@ const express = require('express');
 const {DOTA2GSI} = require('dotagsi');
 
 const app = express();
-const GSI = new DOTA2GSI()
+const GSI = new DOTA2GSI();
 exports.GSI = GSI;
 
 app.use(express.urlencoded({extended:true}));
