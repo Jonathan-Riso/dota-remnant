@@ -53,7 +53,7 @@ module.exports = {
 		.setDescription('Begin streaming game state integration into the messaged chat.'),
 	async execute(interaction) {
 		if (GSI.listenerCount('data') > 0){
-			await interaction.reply("Broadcast already started, to end the current broadcast use the EndBroadcast command.")
+			await interaction.reply({ content: "Broadcast already started, to end the current broadcast use the EndBroadcast command.", ephemeral: true });
 			return
 		}
 		await interaction.reply("Beginning Broadcast")
