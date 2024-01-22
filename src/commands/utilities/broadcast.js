@@ -26,14 +26,14 @@ async function beginBroadcast(dota2){
 			gameEnd=false;
 			console.debug("In Pregame");
 			const remnantEmbed = inProgressEmbed(dota2)
-			await msg.edit({ embeds: [remnantEmbed]});
+			await msg.edit({ content: "Current Game", embeds: [remnantEmbed]});
 
 			
 		} else if (dota2.map && dota2.map.game_state == gamestates["inprogress"]){
 			gameEnd=false;
 			console.debug("In Progress");
 			const remnantEmbed = inProgressEmbed(dota2)
-			await msg.edit({ embeds: [remnantEmbed]});
+			await msg.edit({ content: "Current Game", embeds: [remnantEmbed]});
 
 		} else if (dota2.map && dota2.map.game_state == gamestates["postgame"] && !gameEnd){
 			console.debug("Post game");
