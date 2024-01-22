@@ -4,10 +4,12 @@ const { GSI } = require('../../index')
 const { gamestates } = require('../../helpers/gamestate')
 const { inProgressEmbed } = require('../../helpers/embedHelper')
 
-var message = null;
+var msg = null;
+var channel = null;
+var gameEnd = false;
+
 async function beginBroadcast(dota2){
 	try{
-		var gameEnd = false;
 		if (!dota2.map) {
 			console.debug("Not in game");
 
@@ -37,8 +39,8 @@ async function beginBroadcast(dota2){
 
 		} else if (dota2.map && dota2.map.game_state == gamestates["postgame"] && !gameEnd){
 			console.debug("Post game");
-			await interaction.channel.send(`Game is over, ${dota2.map.win_team} Victory`);
-			msg = await interaction.channel.send("Waiting for player to join game.");
+			await channel.send(`Game is over, ${dota2.map.win_team} victory`);
+			msg = await channel.send("Waiting for player to join game.");
 			gameEnd = true;
 		}
 	} catch (err){
@@ -57,7 +59,8 @@ module.exports = {
 			return
 		}
 		await interaction.reply("Beginning Broadcast")
-		msg = await interaction.channel.send("Waiting for player to join game.");
+		channel = interaction.channel
+		msg = await channel.send("Waiting for player to join game.");
 
 		GSI.on('data', beginBroadcast);
 	},
