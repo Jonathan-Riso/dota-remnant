@@ -9,6 +9,8 @@ var gameEnd = false;
 
 async function beginBroadcast(dota2){
 	try{
+		if (dota2.player && dota2.player.team_name && dota2.player.team_name == "spectator") return;
+		
 		if (!dota2.map) {
 			console.warn("Not in game");
 
@@ -48,12 +50,8 @@ module.exports = {
 		.setDescription('Begin streaming game state integration into the current chat.'),
 	async execute(interaction) {
 		try {
-			client = client_emiters["client"]
-			if(!client) {
-                await interaction.reply({content: "Please launch dota first before starting the broadcast.", ephemeral: true})
-				return
-            }
-			else if (client.listenerCount('new_data') > 0){
+			client = client_emiters["client"];
+			if (client.listenerCount('newdata') > 0){
 				await interaction.reply({ content: "Broadcast already started, to end the current broadcast use the EndBroadcast command.", ephemeral: true });
 				return
 			}
@@ -64,6 +62,7 @@ module.exports = {
 			client.on('newdata', beginBroadcast);
 		} catch (err) {
 			console.error(err);
+			await interaction.reply({content: "Please launch dota first before starting the broadcast.", ephemeral: true})
 		}
 	},
 };

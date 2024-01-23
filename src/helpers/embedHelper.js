@@ -11,6 +11,7 @@ function draftEmbed(dota2){
 }
 
 function inProgressEmbed(dota2){
+    console.log(dota2)
     playersObj = _playerHeroArr(dota2);
     return new EmbedBuilder()
         .setColor(0x0099FF)
