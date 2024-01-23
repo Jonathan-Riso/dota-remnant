@@ -46,9 +46,9 @@ function _getTeamWorths(dota2, faction){
         }
     });
     res = `
-        ***Total Kills***: ${totalKills}
-        ***Win Percentage***: ${win_chance}%
-        ***Total Net Worth***: ${NetWorthSum.toLocaleString()}
+        ***Total Kills***:      ${totalKills}
+        ***Win Percentage***:   ${win_chance}%
+        ***Total Net Worth***:  ${NetWorthSum.toLocaleString()}
         ***Total Experience***: ${XPSum.toLocaleString()}\n
     `;
     return res;
@@ -69,8 +69,8 @@ function _getWorths(players, faction){
                 ${_playerHeroAndLevel(player)}
                 ${_kdaToStr(player)}
                 ***Net Worth:*** ${player.net_worth.toLocaleString()}
-                ***GPM/XPM:*** ${player.gpm}/${player.xpm}
-                ***Last Hits:*** ${player.last_hits}/${player.denies}\n
+                ***GPM/XPM:***   ${player.gpm}/${player.xpm}
+                ***LH/DN:***     ${player.last_hits}/${player.denies}\n
             `.trimStart(); //Markdown syntax // I don't know why it doesn't work without trimStart. I am actually clueless.
             res = res + player_str;
         }
