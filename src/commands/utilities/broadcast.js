@@ -1,5 +1,4 @@
-const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
-const { DOTA2GSI } = require('dotagsi')
+const { SlashCommandBuilder } = require('discord.js');
 const { GSI } = require('../../index')
 const { gamestates } = require('../../helpers/gamestate')
 const { inProgressEmbed } = require('../../helpers/embedHelper')
@@ -63,5 +62,4 @@ module.exports = {
 
 		GSI.on('data', beginBroadcast);
 	},
-	beginBroadcast: beginBroadcast
 };
