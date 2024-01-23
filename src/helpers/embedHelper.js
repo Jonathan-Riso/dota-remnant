@@ -11,7 +11,6 @@ function draftEmbed(dota2){
 }
 
 function inProgressEmbed(dota2){
-    console.log(dota2)
     playersObj = _playerHeroArr(dota2);
     return new EmbedBuilder()
         .setColor(0x0099FF)
@@ -84,7 +83,7 @@ function _getWorths(playersObj, faction){
                 **${playerObj.player.name}**
                 ${_playerHeroAndLevel(playerObj)}
                 ${_kdaToStr(playerObj)}
-                ***Net Worth:*** ${playerObj.player.net_worth}
+                ***Net Worth:*** ${playerObj.player.net_worth.toLocaleString()}
                 ***GPM/XPM:***   ${playerObj.player.gpm}/${playerObj.player.xpm}
                 ***LH/DN:***     ${playerObj.player.last_hits}/${playerObj.player.denies}\n
             `.trimStart(); //Markdown syntax // I don't know why it doesn't work without trimStart. I am actually clueless.
