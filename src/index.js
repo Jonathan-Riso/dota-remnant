@@ -4,23 +4,25 @@ const { Client, Collection, GatewayIntentBits } = require('discord.js');
 const { botToken } = require('./config.json');
 
 const express = require('express');
-const {DOTA2GSI} = require('dotagsi');
 
-const app = express();
-const GSI = new DOTA2GSI();
-exports.GSI = GSI;
+var d2gsi = require('dota2-gsi');
+var server = new d2gsi();
+
+var client_emiters = { 'client': null}
+exports.client_emiters = client_emiters
+
+server.events.once('newclient', function(client) {
+	console.log("New client connection, IP address: " + client.ip);
+    if (client.auth && client.auth.token) {
+		console.log("Auth token: " + client.auth.token);
+		client_emiters['client'] = client;
+    } else {
+		console.log("No Auth token");
+    }
+});
+
 
 var StopExec = true;
-
-app.use(express.urlencoded({extended:true}));
-app.use(express.raw({limit:'10Mb', type: 'application/json' }));
-
-app.post('/', (req, res) => {
-	const text = req.body.toString().replace(/"(player|owner)":([ ]*)([0-9]+)/gm, '"$1": "$3"').replace(/(player|owner):([ ]*)([0-9]+)/gm, '"$1": "$3"');
-    data = JSON.parse(text);
-	GSI.digest(data);
-    res.sendStatus(200);
-});
 
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
@@ -59,5 +61,4 @@ if (StopExec){
 	}
 	
 	client.login(botToken);
-	app.listen(4000);
 }

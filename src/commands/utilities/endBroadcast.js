@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
-const { GSI } = require('../../index')
+const { client_emiters } = require('../../index')
 // const { beginBroadcast } = require('./broadcast')
 
 module.exports = {
@@ -8,8 +8,9 @@ module.exports = {
 		.setDescription('Ends the current broadcast if it exists.'),
 	async execute(interaction) {
         try{
-            if(GSI.listenerCount('data') > 0) {
-                GSI.removeAllListeners('data'); // Temporary until I get removeListener working.
+            client = client_emiters["client"];
+            if(client.listenerCount('newdata') > 0) {
+                client.removeAllListeners('newdata'); // Temporary until I get removeListener working.
                 await interaction.reply('Broadcast Ended');
             } else {
                 await interaction.reply({ content: 'There are no active broadcasts, use the broadcast command to start one.', ephemeral: true });

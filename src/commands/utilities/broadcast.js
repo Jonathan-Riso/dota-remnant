@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('discord.js');
-const { GSI } = require('../../index')
+const { client_emiters } = require('../../index')
 const { gamestates } = require('../../helpers/gamestate')
 const { inProgressEmbed } = require('../../helpers/embedHelper')
 
@@ -47,14 +47,19 @@ module.exports = {
 		.setName('broadcast')
 		.setDescription('Begin streaming game state integration into the current chat.'),
 	async execute(interaction) {
-		if (GSI.listenerCount('data') > 0){
-			await interaction.reply({ content: "Broadcast already started, to end the current broadcast use the EndBroadcast command.", ephemeral: true });
-			return
-		}
-		await interaction.reply("Beginning Broadcast")
-		channel = interaction.channel
-		msg = await channel.send("Waiting for player to join game.");
+		try {
+			client = client_emiters["client"]
+			if (client.listenerCount('new_data') > 0){
+				await interaction.reply({ content: "Broadcast already started, to end the current broadcast use the EndBroadcast command.", ephemeral: true });
+				return
+			}
+			await interaction.reply("Beginning Broadcast")
+			channel = interaction.channel
+			msg = await channel.send("Waiting for player to join game.");
 
-		GSI.on('data', beginBroadcast);
+			client.on('newdata', beginBroadcast);
+		} catch (err) {
+			console.error(err);
+		}
 	},
 };
