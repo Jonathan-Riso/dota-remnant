@@ -1,6 +1,6 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const { GSI } = require('../../index')
-const { beginBroadcast } = require('./broadcast')
+// const { beginBroadcast } = require('./broadcast')
 
 module.exports = {
 	data: new SlashCommandBuilder()
