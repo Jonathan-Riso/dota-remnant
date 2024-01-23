@@ -49,7 +49,11 @@ module.exports = {
 	async execute(interaction) {
 		try {
 			client = client_emiters["client"]
-			if (client.listenerCount('new_data') > 0){
+			if(!client) {
+                await interaction.reply({content: "Please launch dota first before starting the broadcast.", ephemeral: true})
+				return
+            }
+			else if (client.listenerCount('new_data') > 0){
 				await interaction.reply({ content: "Broadcast already started, to end the current broadcast use the EndBroadcast command.", ephemeral: true });
 				return
 			}

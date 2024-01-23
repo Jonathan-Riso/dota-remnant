@@ -9,7 +9,7 @@ module.exports = {
 	async execute(interaction) {
         try{
             client = client_emiters["client"];
-            if(client.listenerCount('newdata') > 0) {
+            if(client && client.listenerCount('newdata') > 0) {
                 client.removeAllListeners('newdata'); // Temporary until I get removeListener working.
                 await interaction.reply('Broadcast Ended');
             } else {
