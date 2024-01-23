@@ -47,12 +47,11 @@ async function beginBroadcast(dota2){
 		console.error(err);
 	}
 }
-exports.beginBroadcast = beginBroadcast;
 
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('broadcast')
-		.setDescription('Begin streaming game state integration into the messaged chat.'),
+		.setDescription('Begin streaming game state integration into the current chat.'),
 	async execute(interaction) {
 		if (GSI.listenerCount('data') > 0){
 			await interaction.reply({ content: "Broadcast already started, to end the current broadcast use the EndBroadcast command.", ephemeral: true });
@@ -64,4 +63,5 @@ module.exports = {
 
 		GSI.on('data', beginBroadcast);
 	},
+	beginBroadcast: beginBroadcast
 };
