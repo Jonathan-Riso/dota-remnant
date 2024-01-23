@@ -10,6 +10,8 @@ const app = express();
 const GSI = new DOTA2GSI();
 exports.GSI = GSI;
 
+var StopExec = true;
+
 app.use(express.urlencoded({extended:true}));
 app.use(express.raw({limit:'10Mb', type: 'application/json' }));
 
@@ -37,22 +39,25 @@ for (const folder of commandFolders) {
 			client.commands.set(command.data.name, command);
 		} else {
 			console.log(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`);
+			StopExec = false;
 		}
 	}
 }
 
-const eventsPath = path.join(__dirname, 'events');
-const eventFiles = fs.readdirSync(eventsPath).filter(file => file.endsWith('.js'));
-
-for (const file of eventFiles) {
-	const filePath = path.join(eventsPath, file);
-	const event = require(filePath);
-	if (event.once) {
-		client.once(event.name, (...args) => event.execute(...args));
-	} else {
-		client.on(event.name, (...args) => event.execute(...args));
+if (StopExec){
+	const eventsPath = path.join(__dirname, 'events');
+	const eventFiles = fs.readdirSync(eventsPath).filter(file => file.endsWith('.js'));
+	
+	for (const file of eventFiles) {
+		const filePath = path.join(eventsPath, file);
+		const event = require(filePath);
+		if (event.once) {
+			client.once(event.name, (...args) => event.execute(...args));
+		} else {
+			client.on(event.name, (...args) => event.execute(...args));
+		}
 	}
+	
+	client.login(botToken);
+	app.listen(4000);
 }
-
-client.login(botToken);
-app.listen(4000);
