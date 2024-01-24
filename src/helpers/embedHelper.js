@@ -2,7 +2,7 @@ const { EmbedBuilder } = require("discord.js")
 const { heroes } = require("./heroes")
 const { items } = require ("./items")
 
-function draftEmbed(dota2){
+function playingEmbed(dota2){
     const remnantEmbed = new EmbedBuilder()
     .setColor(0x0099FF)
     .setTitle('Dota2 Remnant')
@@ -10,7 +10,7 @@ function draftEmbed(dota2){
     .setTimestamp()
 }
 
-function inProgressEmbed(dota2){
+function spectatorEmbed(dota2){
     console.log(dota2)
     playersObj = _playerHeroArr(dota2);
     return new EmbedBuilder()
@@ -103,4 +103,4 @@ function _getBackpack(player){
     });
     return backpack.toString()
 }
-module.exports = { inProgressEmbed, draftEmbed }
+module.exports = { spectatorEmbed, playingEmbed }

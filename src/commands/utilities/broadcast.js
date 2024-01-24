@@ -1,7 +1,6 @@
 const { SlashCommandBuilder } = require('discord.js');
 const { client_emiters } = require('../../index')
-const { gamestates } = require('../../helpers/gamestate')
-const { inProgressEmbed } = require('../../helpers/embedHelper')
+const {_checkGamestatePlaying, _checkGamestateSpectator} = require('../../helpers/gamestateHelper')
 
 var msg = null;
 var channel = null;
@@ -9,36 +8,14 @@ var gameEnd = false;
 
 async function beginBroadcast(dota2){
 	try{
-		if (dota2.player && dota2.player.team_name && dota2.player.team_name == "spectator") return;
-		
-		if (!dota2.map) {
-			console.warn("Not in game");
-
-		} else if (dota2.map && dota2.map.game_state == gamestates["draft"]){
-			gameEnd=false;
-			await msg.edit("In Draft");
-			
-			
-		} else if (dota2.map && dota2.map.game_state == gamestates["maploading"]){
-			gameEnd=false;
-			await msg.edit("Map is Loading");
-			
-		} else if (dota2.map && dota2.map.game_state == gamestates["pregame"]){
-			gameEnd=false;
-			const remnantEmbed = inProgressEmbed(dota2)
-			await msg.edit({ content: "Current Game", embeds: [remnantEmbed]});
-
-			
-		} else if (dota2.map && dota2.map.game_state == gamestates["inprogress"]){
-			gameEnd=false;
-			const remnantEmbed = inProgressEmbed(dota2)
-			await msg.edit({ content: "Current Game", embeds: [remnantEmbed]});
-
-		} else if (dota2.map && dota2.map.game_state == gamestates["postgame"] && !gameEnd){
-			await channel.send(`Game is over, ${dota2.map.win_team} victory`);
-			msg = await channel.send("Waiting for player to join game.");
-			gameEnd = true;
+		if (dota2.player && dota2.player.team_name && dota2.player.team_name == "spectator"){
+			_checkGamestateSpectator(dota2, msg, channel, gameEnd)
 		}
+		
+		else if (dota2.player && dota2.player.team_name && dota2.player.activity == "playing"){
+			_checkGamestatePlaying(dota2, msg, channel, gameEnd)
+		}
+		
 	} catch (err){
 		console.error(err);
 	}
