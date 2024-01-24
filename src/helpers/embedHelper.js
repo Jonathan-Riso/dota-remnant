@@ -3,10 +3,28 @@ const { heroes } = require("./heroes")
 const { items } = require ("./items")
 
 function playingEmbed(dota2){
+    const playerObj = {
+        "player": dota2.player,
+        "hero": dota2.hero,
+        "team_name": dota2.player.team_name,
+        "items": dota2.items
+    }
+    const player_str = `
+                **${playerObj.player.name}**
+                ${_playerHeroAndLevel(playerObj)}
+                ${_kdaToStr(playerObj)}
+                ***GPM/XPM:***   ${playerObj.player.gpm}/${playerObj.player.xpm}
+                ***LH/DN:***     ${playerObj.player.last_hits}/${playerObj.player.denies}\n
+            `.trimStart();
     const remnantEmbed = new EmbedBuilder()
     .setColor(0x0099FF)
     .setTitle('Dota2 Remnant')
-    .addFields()
+    .addFields(
+        { name: "Player Stats", value: player_str, inline: true},
+        { name: "Current Inventory", value: _getBackpack(playerObj), inline: true},
+        { name: , value:, inline, true},
+        { name: , value:, inline, true}
+    )
     .setTimestamp()
 }
 
@@ -94,13 +112,28 @@ function _getWorths(playersObj, faction){
     return res;
 }
 
-function _getBackpack(player){
+function _getBackpack(playerObj){
     var backpack = [];
-    player.items.forEach( (item) => {
-        if (item.name != 'empty') {
-            backpack.push(items[item.name]);
+    var stash = [];
+    const slots = Object.keys(playerObj.items)
+    const playerItems = playerObj.items
+    slots.forEach( (slot) => {
+        if (playerItems[slot].name != 'empty') {
+            if(slot.startsWith("slot")){
+                backpack.push(items[playerItems[slot].name]);
+            } else if(slot.startsWith("stash")){
+                stash.push(items[playerItems[slot].name]);
+            }
         }
     });
-    return backpack.toString()
+    const inventory_string = `
+        Backpack: ${backpack.toLocaleString()}
+        Stash: ${stash.length > 0 ? stash.toString() : 'empty'}
+        Neutral: ${items[playerItems.neutral0.name]}
+        Teleport Scroll(s): ${playerItems.teleport0.item_charges}
+        Aghanims Scepter: ${player.hero.aghanims_scepter ? 'Yes' : 'No'}
+        Aghanims Shard: ${player.hero.aghanims_shard ? 'Yes' : 'No'}
+    `.trimStart();
+    return inventory_string;
 }
 module.exports = { spectatorEmbed, playingEmbed }

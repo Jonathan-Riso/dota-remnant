@@ -57,7 +57,7 @@ async function _checkGamestatePlaying(dota2, msg, channel, gameEnd){
 			
 		} else if (dota2.map && dota2.map.game_state == gamestates["inprogress"]){
 			gameEnd=false;
-			const remnantEmbed = inProgressEmbed(dota2)
+			const remnantEmbed = playingEmbed(dota2)
 			await msg.edit({ content: "Current Game", embeds: [remnantEmbed]});
 
 		} else if (dota2.map && dota2.map.game_state == gamestates["postgame"] && !gameEnd){
