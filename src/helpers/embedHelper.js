@@ -2,15 +2,35 @@ const { EmbedBuilder } = require("discord.js")
 const { heroes } = require("./heroes")
 const { items } = require ("./items")
 
-function draftEmbed(dota2){
-    const remnantEmbed = new EmbedBuilder()
+function playingEmbed(dota2){
+    const playerObj = {
+        "player": dota2.player,
+        "hero": dota2.hero,
+        "team_name": dota2.player.team_name,
+        "items": dota2.items
+    }
+    const player_str = `
+                **${playerObj.player.name}**
+                ${_playerHeroAndLevel(playerObj)}
+                ${_kdaToStr(playerObj)}
+                ***Current Kill Streak:*** ${playerObj.player.kill_streak}
+                ***GPM/XPM:***   ${playerObj.player.gpm}/${playerObj.player.xpm}
+                ***LH/DN:***     ${playerObj.player.last_hits}/${playerObj.player.denies}\n
+            `.trimStart();
+    return new EmbedBuilder()
     .setColor(0x0099FF)
     .setTitle('Dota2 Remnant')
-    .addFields()
+    .addFields(
+        { name: "Player Stats", value: player_str, inline: false},
+        { name: "Current Inventory", value: _getBackpack(playerObj), inline: false},
+    )
     .setTimestamp()
+    .setFooter({ text: 'https://github.com/Jonathan-Riso/dota-remnant'})
 }
 
-function inProgressEmbed(dota2){
+function spectatorEmbed(dota2){
+    console.log(dota2)
+    playersObj = _playerHeroArr(dota2);
     return new EmbedBuilder()
         .setColor(0x0099FF)
         .setTitle('Dota2 Remnant')
@@ -18,59 +38,73 @@ function inProgressEmbed(dota2){
             { name: 'Radiant', 	value: `${_getTeamWorths(dota2, 'radiant')}`, inline: true },
             { name: 'Dire', 	value: `${_getTeamWorths(dota2, 'dire')}`, inline: true },
             { name: ' ', value: ' ' },
-            { name: 'Worths', value: `${_getWorths(dota2.players, 'radiant')}`, inline: true },
-            { name: 'Worths', value: `${_getWorths(dota2.players, 'dire')}`, inline: true }
+            { name: 'Worths', value: `${_getWorths(playersObj, 'radiant')}`, inline: true },
+            { name: 'Worths', value: `${_getWorths(playersObj, 'dire')}`, inline: true }
         )
         .setTimestamp()
         .setFooter({ text: 'https://github.com/Jonathan-Riso/dota-remnant'});
 }
 
-function _playerHeroAndLevel(player){
-    return `__${heroes[player.hero.name]}\tLvl ${player.hero.level}__`;
+function _playerHeroArr(dota2){
+    players = [
+        {"player": dota2.player.team2.player0, "hero": dota2.hero.team2.player0, "team_name": "radiant"},
+        {"player": dota2.player.team2.player1, "hero": dota2.hero.team2.player1, "team_name": "radiant"},
+        {"player": dota2.player.team2.player2, "hero": dota2.hero.team2.player2, "team_name": "radiant"},
+        {"player": dota2.player.team2.player3, "hero": dota2.hero.team2.player3, "team_name": "radiant"},
+        {"player": dota2.player.team2.player4, "hero": dota2.hero.team2.player4, "team_name": "radiant"},
+        {"player": dota2.player.team3.player5, "hero": dota2.hero.team3.player5, "team_name": "dire"},
+        {"player": dota2.player.team3.player6, "hero": dota2.hero.team3.player6, "team_name": "dire"},
+        {"player": dota2.player.team3.player7, "hero": dota2.hero.team3.player7, "team_name": "dire"},
+        {"player": dota2.player.team3.player8, "hero": dota2.hero.team3.player8, "team_name": "dire"},
+        {"player": dota2.player.team3.player9, "hero": dota2.hero.team3.player9, "team_name": "dire"}
+    ]
+    return players
 }
 
-function _kdaToStr(player){
-    return `${player.kills}/${player.assists}/${player.deaths}`;
+function _playerHeroAndLevel(playerObj){
+    return `__${heroes[playerObj.hero.name]}\tLvl ${playerObj.hero.level}__`;
+}
+
+function _kdaToStr(playerObj){
+    return `${playerObj.player.kills}/${playerObj.player.assists}/${playerObj.player.deaths}`;
 }
 
 function _getTeamWorths(dota2, faction){
     var NetWorthSum = 0;
-    var XPSum = 0;
     var totalKills = 0;
     const win_chance = (faction == 'radiant') ? dota2.map.radiant_win_chance : 100 - dota2.map.radiant_win_chance;
-    dota2.players.forEach((player) => {
-        if (player.team_name == faction) {
-            NetWorthSum += player.net_worth;
-            XPSum += player.hero.xp;
-            totalKills += player.kills;
+    players = _playerHeroArr(dota2);
+    players.forEach((playerObj) => {
+        if (playerObj.team_name == faction) {
+            NetWorthSum += playerObj.player.net_worth;
+            totalKills += playerObj.player.kills;
         }
     });
     res = `
         ***Total Kills***:      ${totalKills}
         ***Win Percentage***:   ${win_chance}%
         ***Total Net Worth***:  ${NetWorthSum.toLocaleString()}
-        ***Total Experience***: ${XPSum.toLocaleString()}\n
     `;
     return res;
 }
 
-function _getWorths(players, faction){
+function _getWorths(playersObj, faction){
     function compare(a, b){
-        if (a.net_worth > b.net_worth) return -1;
-        if (a.net_worth < b.net_worth) return 1;
+        if (a["player"].net_worth > b["player"].net_worth) return -1;
+        if (a["player"].net_worth < b["player"].net_worth) return 1;
         return 0;        
     }
     var res = '';
-    const playersSorted = [...players].sort(compare);
-    playersSorted.forEach((player) => {
-        if (player.team_name == faction) {
+    const playersSorted = [...playersObj].sort(compare);
+    playersSorted.forEach((playerObj) => {
+        if (playerObj.team_name == faction) {
             const player_str = `
-                **${player.name}**
-                ${_playerHeroAndLevel(player)}
-                ${_kdaToStr(player)}
-                ***Net Worth:*** ${player.net_worth.toLocaleString()}
-                ***GPM/XPM:***   ${player.gpm}/${player.xpm}
-                ***LH/DN:***     ${player.last_hits}/${player.denies}\n
+                **${playerObj.player.name}**
+                ${_playerHeroAndLevel(playerObj)}
+                ${_kdaToStr(playerObj)}
+                ***Net Worth:*** ${playerObj.player.net_worth.toLocaleString()}
+                ***GPM/XPM:***   ${playerObj.player.gpm}/${playerObj.player.xpm}
+                ***LH/DN:***     ${playerObj.player.last_hits}/${playerObj.player.denies}\n
             `.trimStart(); //Markdown syntax // I don't know why it doesn't work without trimStart. I am actually clueless.
             res = res + player_str;
         }
@@ -78,13 +112,30 @@ function _getWorths(players, faction){
     return res;
 }
 
-function _getBackpack(player){
+function _getBackpack(playerObj){
     var backpack = [];
-    player.items.forEach( (item) => {
-        if (item.name != 'empty') {
-            backpack.push(items[item.name]);
+    var stash = [];
+    const slots = Object.keys(playerObj.items)
+    const playerItems = playerObj.items
+    slots.forEach( (slot) => {
+        if (playerItems[slot].name != 'empty') {
+            if(slot.startsWith("slot")){
+                backpack.push(items[playerItems[slot].name]);
+            } else if(slot.startsWith("stash")){
+                stash.push(items[playerItems[slot].name]);
+            }
         }
     });
-    return backpack.toString()
+    var neutral_item = playerItems.neutral0.name
+    const inventory_string = `
+        ***Gold***: ${playerObj.player.gold.toLocaleString()}
+        ***Backpack***: ${backpack.toString()}
+        ***Stash***: ${stash.length > 0 ? stash.toString() : 'empty'}
+        ***Neutral***: ${neutral_item}
+        ***Teleport Scroll(s)***: ${playerItems.teleport0.item_charges}
+        ***Aghanims Scepter***: ${playerObj.hero.aghanims_scepter ? 'Yes' : 'No'}
+        ***Aghanims Shard***: ${playerObj.hero.aghanims_shard ? 'Yes' : 'No'}
+    `.trimStart();
+    return inventory_string;
 }
-module.exports = { inProgressEmbed, draftEmbed }
+module.exports = { spectatorEmbed, playingEmbed }
