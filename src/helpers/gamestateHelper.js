@@ -17,7 +17,7 @@ async function _checkGamestateSpectator(dota2, msg, channel, gameEnd){
 			
 		} else if (dota2.map && dota2.map.game_state == gamestates["pregame"]){
 			gameEnd=false;
-			const remnantEmbed = embed(dota2)
+			const remnantEmbed = spectatorEmbed(dota2)
 			await msg.edit({ content: "Current Game", embeds: [remnantEmbed]});
 
 			
@@ -52,7 +52,7 @@ async function _checkGamestatePlaying(dota2, msg, channel, gameEnd){
 			
 		} else if (dota2.map && dota2.map.game_state == gamestates["pregame"]){
 			gameEnd=false;
-			const remnantEmbed = embed(dota2)
+			const remnantEmbed = playingEmbed(dota2)
 			await msg.edit({ content: "Current Game", embeds: [remnantEmbed]});
 
 			

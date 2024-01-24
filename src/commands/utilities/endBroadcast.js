@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
-const { client_emiters } = require('../../index')
+const { client_emitters } = require('../../index')
 // const { beginBroadcast } = require('./broadcast')
 
 module.exports = {
@@ -8,7 +8,7 @@ module.exports = {
 		.setDescription('Ends the current broadcast if it exists.'),
 	async execute(interaction) {
         try{
-            client = client_emiters["client"];
+            client = client_emitters["client"];
             if(client && client.listenerCount('newdata') > 0) {
                 client.removeAllListeners('newdata'); // Temporary until I get removeListener working.
                 await interaction.reply('Broadcast Ended');

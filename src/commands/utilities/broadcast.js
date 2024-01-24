@@ -8,7 +8,8 @@ var gameEnd = false;
 
 async function beginBroadcast(dota2){
 	try{
-		if (dota2.player && dota2.player.team_name && dota2.player.team_name == "spectator"){
+		console.log(dota2)
+		if (dota2.player && dota2.player.team2 && dota2.player.team3){
 			_checkGamestateSpectator(dota2, msg, channel, gameEnd)
 		}
 		
