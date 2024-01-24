@@ -13,17 +13,19 @@ function playingEmbed(dota2){
                 **${playerObj.player.name}**
                 ${_playerHeroAndLevel(playerObj)}
                 ${_kdaToStr(playerObj)}
+                ***Current Kill Streak:*** ${playerObj.player.kill_streak}
                 ***GPM/XPM:***   ${playerObj.player.gpm}/${playerObj.player.xpm}
                 ***LH/DN:***     ${playerObj.player.last_hits}/${playerObj.player.denies}\n
             `.trimStart();
-    const remnantEmbed = new EmbedBuilder()
+    return new EmbedBuilder()
     .setColor(0x0099FF)
     .setTitle('Dota2 Remnant')
     .addFields(
-        { name: "Player Stats", value: player_str, inline: true},
-        { name: "Current Inventory", value: _getBackpack(playerObj), inline: true},
+        { name: "Player Stats", value: player_str, inline: false},
+        { name: "Current Inventory", value: _getBackpack(playerObj), inline: false},
     )
     .setTimestamp()
+    .setFooter({ text: 'https://github.com/Jonathan-Riso/dota-remnant'})
 }
 
 function spectatorEmbed(dota2){
@@ -124,13 +126,15 @@ function _getBackpack(playerObj){
             }
         }
     });
+    var neutral_item = playerItems.neutral0.name
     const inventory_string = `
-        Backpack: ${backpack.toLocaleString()}
-        Stash: ${stash.length > 0 ? stash.toString() : 'empty'}
-        Neutral: ${items[playerItems.neutral0.name]}
-        Teleport Scroll(s): ${playerItems.teleport0.item_charges}
-        Aghanims Scepter: ${player.hero.aghanims_scepter ? 'Yes' : 'No'}
-        Aghanims Shard: ${player.hero.aghanims_shard ? 'Yes' : 'No'}
+        ***Gold***: ${playerObj.player.gold.toLocaleString()}
+        ***Backpack***: ${backpack.toString()}
+        ***Stash***: ${stash.length > 0 ? stash.toString() : 'empty'}
+        ***Neutral***: ${neutral_item}
+        ***Teleport Scroll(s)***: ${playerItems.teleport0.item_charges}
+        ***Aghanims Scepter***: ${playerObj.hero.aghanims_scepter ? 'Yes' : 'No'}
+        ***Aghanims Shard***: ${playerObj.hero.aghanims_shard ? 'Yes' : 'No'}
     `.trimStart();
     return inventory_string;
 }

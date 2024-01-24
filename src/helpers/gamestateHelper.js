@@ -1,4 +1,5 @@
 const { spectatorEmbed, playingEmbed } = require('./embedHelper')
+const { gamestates } = require('./gamestate')
 
 async function _checkGamestateSpectator(dota2, msg, channel, gameEnd){
 	try{
