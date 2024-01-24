@@ -22,8 +22,6 @@ function playingEmbed(dota2){
     .addFields(
         { name: "Player Stats", value: player_str, inline: true},
         { name: "Current Inventory", value: _getBackpack(playerObj), inline: true},
-        { name: , value:, inline, true},
-        { name: , value:, inline, true}
     )
     .setTimestamp()
 }

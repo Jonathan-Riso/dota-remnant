@@ -8,14 +8,14 @@ const express = require('express');
 var d2gsi = require('dota2-gsi');
 var server = new d2gsi();
 
-var client_emiters = { 'client': null}
-exports.client_emiters = client_emiters
+var client_emitters = { 'client': null}
+exports.client_emitters = client_emitters
 
 server.events.once('newclient', function(client) {
 	console.log("New client connection, IP address: " + client.ip);
     if (client.auth && client.auth.token) {
 		console.log("Auth token: " + client.auth.token);
-		client_emiters['client'] = client;
+		client_emitters['client'] = client;
     } else {
 		console.log("No Auth token");
     }

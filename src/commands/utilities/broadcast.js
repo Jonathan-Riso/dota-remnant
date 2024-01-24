@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('discord.js');
-const { client_emiters } = require('../../index')
+const { client_emitters: client_emitters } = require('../../index')
 const {_checkGamestatePlaying, _checkGamestateSpectator} = require('../../helpers/gamestateHelper')
 
 var msg = null;
@@ -27,7 +27,7 @@ module.exports = {
 		.setDescription('Begin streaming game state integration into the current chat.'),
 	async execute(interaction) {
 		try {
-			client = client_emiters["client"];
+			client = client_emitters["client"];
 			if (client.listenerCount('newdata') > 0){
 				await interaction.reply({ content: "Broadcast already started, to end the current broadcast use the EndBroadcast command.", ephemeral: true });
 				return
